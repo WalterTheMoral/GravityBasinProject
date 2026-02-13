@@ -5,9 +5,9 @@ import time
 
 from MachineLearningBase import *
 
-database = pd.read_csv("database.csv")
-X = database.to_numpy()[:, :-2].T
-Y = num_to_one_hot(3, database["Convergence Point"].to_numpy())
+database = pd.read_csv("fixed_attractors.csv")
+X = database.to_numpy()[:, :2].T
+Y = num_to_one_hot(3, database.to_numpy()[:, 8])
 
 X = 2 * (X/100) - 1 # Normalise between [-1,1]
 
@@ -25,11 +25,9 @@ Y_Test = Y[:, train_examples:]
 
 
 layers = (
-    LayerConfiguration("Input Layer", 32, (8,), Relu(), He(), Adam()),
+    LayerConfiguration("Input Layer", 32, (2,), Relu(), He(), Adam()),
     LayerConfiguration("Hidden Layer 1", 32, (32,), Relu(), He(), Adam()),
-    LayerConfiguration("Hidden Layer 2", 32, (32,), Relu(), He(), Adam()),
-    LayerConfiguration("Hidden Layer 2", 16, (32,), Relu(), He(), Adam()),
-    LayerConfiguration("Softmax Layer", 3, (16,), Softmax(), Xaviar(), Adam()),
+    LayerConfiguration("Softmax Layer", 3, (32,), Softmax(), Xaviar(), Adam()),
 )
 model = Network(
     NetworkConfiguration("Model", CategoricalCrossEntropy())
@@ -40,7 +38,7 @@ print(X_Train.shape)
 print(Y_Train.shape)
 
 start = time.time()
-costs = model.train(X_Train, Y_Train, 10000)
+costs = model.train(X_Train, Y_Train, 1000)
 print(time.time() - start)
 model.save_weights("Digits")
 plt.plot(np.squeeze(costs))
