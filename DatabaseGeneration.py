@@ -1,6 +1,8 @@
 import csv
+import os.path
 import random
 import time
+import itertools
 import multiprocessing as mp
 
 from Simulation import *
@@ -10,22 +12,20 @@ def random_coordinates():
     y = random.uniform(0, 100)
     return x, y
 
-def generate_samples(_):
+def generate_sample(_):
     attractors = [
-        FixedMass(25, 75, 1),
-        FixedMass(70, 20, 1),
-        FixedMass(65, 75, 1)
+        FixedMass(*random_coordinates(), 1)
+        for _ in range(3)
     ]
     point_mass = PointMass(*random_coordinates(), 50)
     sim = Simulator(attractors, point_mass)
 
     start = time.time()
-    sim.converge_to_which_basin()
+    convergence_point = sim.converge_to_which_basin()
     elapsed = start - time.time()
 
     return [
-        point_mass.point[0],
-        point_mass.point[1],
+        point_mass.point[0], point_mass.point[1],
         attractors[0].point[0], attractors[0].point[1],
         attractors[1].point[0], attractors[1].point[1],
         attractors[2].point[0], attractors[2].point[1],
@@ -33,53 +33,70 @@ def generate_samples(_):
         elapsed
     ]
 
-full_start = time.time()
-with open('fixed_attractors.csv', 'a', newline='') as database:
-    fieldnames = ["Point Mass X", "Point Mass Y",
-                "Fixed Point 1 X", "Fixed Point 1 Y",
-                "Fixed Point 2 X", "Fixed Point 2 Y",
-                "Fixed Point 3 X", "Fixed Point 3 Y",
-                "Convergence Point", "Convergence Time"
-    ]
-    point_fields = fieldnames[0:2]
-    attractor_fields = [
-        fieldnames[2 + 2 * i: 4 + 2 * i]
-        for i in range(3)
-    ]
-
-    writer = csv.DictWriter(database, fieldnames=fieldnames)
-    writer.writeheader()
-
-    # for i in range(100):
+def generate_sample_with_permutations(_):
 
     attractors = [
-        FixedMass(25, 75, 1),
-        FixedMass(70, 20, 1),
-        FixedMass(65, 75, 1)
+        FixedMass(*random_coordinates(), 1)
+        for _ in range(3)
     ]
 
-    i = -1
-    while True:
-        i+=1
-        point_mass = PointMass(*random_coordinates(), 50)
-        # attractors = [FixedMass(*random_coordinates(), 1) for _ in range(3)]
-        sim = Simulator(attractors, point_mass)
+    point_mass = PointMass(*random_coordinates(), 50)
+    sim = Simulator(attractors, point_mass)
 
-        point_dict = {k: v for k, v in zip(point_fields, point_mass.point)}
-        attractor_dicts = {
-            k: v
-            for fields, attractor in zip(attractor_fields, attractors)
-            for k, v in zip(fields, attractor.point)
-        }
+    start = time.time()
+    convergence_point = sim.converge_to_which_basin()
+    elapsed = time.time() - start
 
-        start = time.time()
-        convergence_point = sim.converge_to_which_basin()
-        elapsed = time.time() - start
+    results = []
 
-        convergence_and_time_dict = {"Convergence Point": convergence_point, "Convergence Time": elapsed}
+    for perm in itertools.permutations(range(3)):
 
-        writer.writerow(point_dict | attractor_dicts | convergence_and_time_dict)
+        # perm maps new_index -> old_index
+        permuted_attractors = [attractors[i] for i in perm]
 
-        print(i)
+        # find where original convergence index moved
+        new_convergence_index = perm.index(convergence_point)
 
-print(time.time() - full_start)
+        row = [
+            point_mass.point[0], point_mass.point[1],
+            permuted_attractors[0].point[0], permuted_attractors[0].point[1],
+            permuted_attractors[1].point[0], permuted_attractors[1].point[1],
+            permuted_attractors[2].point[0], permuted_attractors[2].point[1],
+            new_convergence_index,
+            elapsed
+        ]
+
+        results.append(row)
+
+    return results
+
+
+if __name__ == "__main__":
+    fieldnames = [
+        "Point Mass X", "Point Mass Y",
+        "Fixed Point 1 X", "Fixed Point 1 Y",
+        "Fixed Point 2 X", "Fixed Point 2 Y",
+        "Fixed Point 3 X", "Fixed Point 3 Y",
+        "Convergence Point", "Convergence Time"
+    ]
+
+    num_samples = 1_000_000
+    num_workers = mp.cpu_count() - 3  # use all cores
+
+    with mp.Pool(num_workers) as pool:
+        results = pool.imap_unordered(generate_sample_with_permutations, range(num_samples), chunksize=100)
+
+        with open("permuted_database.csv", "a", newline="") as f:
+            writer = csv.writer(f)
+
+            # if os.path.getsize(f.name) == 0:
+            #     writer.writeheader()
+
+            i = 0
+            for rows in results:
+                for row in rows:
+                    writer.writerow(row)
+                    i += 1
+
+                if i % 100 == 0:
+                    print(i)
