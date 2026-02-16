@@ -27,9 +27,7 @@ Y_Test = Y[:, train_examples:]
 layers = (
     LayerConfiguration("Input Layer", 32, (8,), Relu(), He(), Adam()),
     LayerConfiguration("Hidden Layer 1", 32, (32,), Relu(), He(), Adam()),
-    LayerConfiguration("Hidden Layer 2", 32, (32,), Relu(), He(), Adam()),
-    LayerConfiguration("Hidden Layer 2", 16, (32,), Relu(), He(), Adam()),
-    LayerConfiguration("Softmax Layer", 3, (16,), Softmax(), Xaviar(), Adam()),
+    LayerConfiguration("Softmax Layer", 3, (32,), Softmax(), Xaviar(), Adam()),
 )
 model = Network(
     NetworkConfiguration("Model", CategoricalCrossEntropy())
