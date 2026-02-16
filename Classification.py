@@ -5,7 +5,7 @@ import time
 
 from MachineLearningBase import *
 
-database = pd.read_csv("database.csv")
+database = pd.read_csv("permuted_database.csv")
 X = database.to_numpy()[:, :-2].T
 Y = num_to_one_hot(3, database["Convergence Point"].to_numpy())
 
@@ -40,7 +40,7 @@ print(X_Train.shape)
 print(Y_Train.shape)
 
 start = time.time()
-costs = model.train(X_Train, Y_Train, 10000)
+costs = model.train(X_Train, Y_Train, 100)
 print(time.time() - start)
 model.save_weights("Digits")
 plt.plot(np.squeeze(costs))
