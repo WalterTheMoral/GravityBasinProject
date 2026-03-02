@@ -34,7 +34,7 @@ with open("database.csv", "r") as points:
     data = [float(x) for x in list(pointReader)[28]]
     print(data)
     point = PointMass(data[0], data[1], 50)
-    attractors = [FixedMass(data[2*i+2], data[2*i+3]) for i in range(3)]
+    attractors = [FixedMass(data[2*i+2], data[2*i+3], 1) for i in range(3)]
     print([attractor.point for attractor in attractors])
     sims = [Simulator(attractors, point)]
 

@@ -5,7 +5,7 @@ import time
 
 from MachineLearningBase import *
 
-database = pd.read_csv("permuted_database.csv")
+database = pd.read_csv("Permuted Data.csv")
 X = database.to_numpy()[:, :-2].T
 Y = num_to_one_hot(3, database["Convergence Point"].to_numpy())
 
@@ -24,10 +24,15 @@ Y_Train = Y[:, :train_examples]
 Y_Test = Y[:, train_examples:]
 
 
+# layers = (
+#     LayerConfiguration("Input Layer", 32, (8,), Relu(), He(), Adam()),
+#     LayerConfiguration("Hidden Layer 1", 32, (32,), Relu(), He(), Adam()),
+#     LayerConfiguration("Softmax Layer", 3, (32,), Softmax(), Xaviar(), Adam()),
+# )
 layers = (
-    LayerConfiguration("Input Layer", 32, (8,), Relu(), He(), Adam()),
-    LayerConfiguration("Hidden Layer 1", 32, (32,), Relu(), He(), Adam()),
-    LayerConfiguration("Softmax Layer", 3, (32,), Softmax(), Xaviar(), Adam()),
+    LayerConfiguration("Input Layer", 32, (8,), Relu(), File("Saved Weights/Layer0.h5"), Adam()),
+    LayerConfiguration("Hidden Layer 1", 32, (32,), Relu(), File("Saved Weights/Layer1.h5"), Adam()),
+    LayerConfiguration("Softmax Layer", 3, (32,), Softmax(), File("Saved Weights/Layer2.h5"), Adam()),
 )
 model = Network(
     NetworkConfiguration("Model", CategoricalCrossEntropy())
@@ -38,13 +43,13 @@ print(X_Train.shape)
 print(Y_Train.shape)
 
 start = time.time()
-costs = model.train(X_Train, Y_Train, 100)
+# costs = model.train(X_Train, Y_Train, 500)
 print(time.time() - start)
-model.save_weights("Digits")
-plt.plot(np.squeeze(costs))
-plt.ylabel('cost')
-plt.xlabel('iterations')
-plt.title("Cost over time " + str(0.1))
+model.save_weights("Saved Weights")
+# plt.plot(np.squeeze(costs))
+# plt.ylabel('cost')
+# plt.xlabel('iterations')
+# plt.title("Cost over time " + str(0.1))
 plt.show()
 
 model.confusion_matrix(X_Train, Y_Train)
