@@ -74,6 +74,9 @@ class PointMass(FixedMass):
 
         self.point = self.x, self.y
 
+    def __str__(self):
+        return f"Fixed Mass: ({self.x}, {self.y})"
+
 
 class Simulator:
     def __init__(self, attractors: List[FixedMass], point: PointMass):
