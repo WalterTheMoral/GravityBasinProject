@@ -46,7 +46,9 @@ if __name__ == "__main__":
     ]
 
     num_samples = 100_000
-    num_workers = mp.cpu_count() - 3  # use all cores
+    num_workers = mp.cpu_count()  # use all cores
+
+    print("Start")
 
     with mp.Pool(num_workers) as pool:
         results = pool.imap_unordered(generate_sample, range(num_samples), chunksize=100)
