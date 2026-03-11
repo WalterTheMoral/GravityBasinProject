@@ -239,9 +239,7 @@ class GravityApp:
                     continue
                 rows.append(values)
 
-        r = DatabaseGeneration.generate_sample(0)
-        print(r)
-        return [r]
+        return rows
 
     def randomise_points(self):
         self.simulating = False

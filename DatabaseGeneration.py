@@ -45,19 +45,16 @@ if __name__ == "__main__":
         "Convergence Point", "Convergence Time"
     ]
 
-    num_samples = 100_000
-    num_workers = mp.cpu_count()  # use all cores
+    num_samples = 300_000
+    num_workers = mp.cpu_count() - 2  # use all cores
 
     print("Start")
 
     with mp.Pool(num_workers) as pool:
         results = pool.imap_unordered(generate_sample, range(num_samples), chunksize=100)
 
-        with open("database_v2.csv", "a", newline="") as f:
+        with open("database_v3.csv", "a", newline="") as f:
             writer = csv.writer(f)
-
-            # if os.path.getsize(f.name) == 0:
-            #     writer.writeheader()
 
             i = 0
             for row in results:
