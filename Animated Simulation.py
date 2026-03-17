@@ -30,13 +30,17 @@ J = 6
 # sims = [Simulator(attractors, PointMass(random.randint(0, 100), random.randint(0, 100), 50))]
 
 with open("database.csv", "r") as points:
-    pointReader = csv.reader(points)
-    data = [float(x) for x in list(pointReader)[28]]
-    print(data)
-    point = PointMass(data[0], data[1], 50)
-    attractors = [FixedMass(data[2*i+2], data[2*i+3], 1) for i in range(3)]
-    print([attractor.point for attractor in attractors])
-    sims = [Simulator(attractors, point)]
+    # pointReader = csv.reader(points)
+    # data = [float(x) for x in list(pointReader)[28]]
+    # print(data)
+    # point = PointMass(data[0], data[1], 50)
+    # attractors = [FixedMass(data[2*i+2], data[2*i+3], 1) for i in range(3)]
+    # print([attractor.point for attractor in attractors])
+    # sims = [Simulator(attractors, point)]
+
+    attractors = [FixedMass(78.824974, 4.520086,1), FixedMass(39.817738, 42.388256, 1), FixedMass(83.38818, 72.374374,1)]
+    sim = Simulator(attractors, PointMass(82.09957, 76.99749, 50))
+    sims = [sim]
 
 paths = [[] for _ in sims]
 
@@ -52,13 +56,17 @@ while running:
                           PointMass(x/10, y/10, m, g_constant=g_constant))
             )
             paths.append([])
+            # print(sims[-1].converge_to_which_basin())
 
     screen.fill((255, 255, 255))
 
+    i = 0
     for sim in sims:
-        for _ in range(60):
-            sim.update(1/60)
+        # for _ in range(60):
+        sim.update(1/60)
+        i += 1
         if sim.converged()[0]:
+            print(i)
             print(f"{sims.index(sim)} converged to {sim.converged()[1]}")
             sims.remove(sim)
 
@@ -72,7 +80,7 @@ while running:
 
     for i, path in enumerate(paths):
         for point in path:
-            pygame.draw.circle(screen, (i * 255//len(sims), 0, 0), mult(point), 1)
+            pygame.draw.circle(screen, (i * 255//(len(sims)+1), 0, 0), mult(point), 1)
 
 
     # Flip the display to bring our drawings to the screen

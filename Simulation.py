@@ -84,7 +84,7 @@ class Simulator:
         self.point = point
 
     def update(self, dt: float = 1/60):
-        force = self.point.gravitational_force(self.attractors) + self.point.friction_force()
+        force = self.point.gravitational_force(self.attractors) + self.point.friction_force(0.05)
         self.point.update(force, dt)
 
     def converged_to_fixed_mass(self, fixed_mass: FixedMass | int,
@@ -98,7 +98,7 @@ class Simulator:
 
         return False
 
-    def converged(self, max_distance: float = 2, max_velocity: float = 1) -> Tuple[bool, int | None]:
+    def converged(self, max_distance: float = 2, max_velocity: float = 3) -> Tuple[bool, int | None]:
         for n, attractor in enumerate(self.attractors):
             if self.converged_to_fixed_mass(attractor, max_distance, max_velocity):
                 return True, n
