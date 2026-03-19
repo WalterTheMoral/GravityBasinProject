@@ -29,6 +29,7 @@ def simulate_batch():
 
     # initial particle states
     pos = random_points(BATCH_SIZE)
+    initial_pos = pos.copy()
     vel = cp.zeros((BATCH_SIZE, 2))
 
     # generate 3 attractors
@@ -81,7 +82,7 @@ def simulate_batch():
         if cp.all(converged):
             break
 
-    return pos, attractors, basin
+    return initial_pos, attractors, basin
 
 
 def generate_dataset():

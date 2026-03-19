@@ -9,8 +9,8 @@ from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
 import pygame
+from Util.Util import num_to_one_hot
 
-import DatabaseGeneration
 from Classification import model
 from Simulation import FixedMass, PointMass, Simulator
 
@@ -37,6 +37,9 @@ POINT_COLORS = [
 ]
 POINT_NAMES = ["Attractor A", "Attractor B", "Attractor C", "Mass"]
 
+rows = np.load("basin_dataset_gpu_1E6.npz")["X"].T
+answers = num_to_one_hot(3, np.load("basin_dataset_gpu_1E6.npz")["y"])
+print(rows.shape)
 
 @dataclass
 class MassPoint:
@@ -186,7 +189,7 @@ class GravityApp:
             FixedMass(p[1].x, p[1].y, 1),
             FixedMass(p[2].x, p[2].y, 1),
         ]
-        point_mass = PointMass(p[3].x, p[3].y, 50)
+        point_mass = PointMass(p[3].x, p[3].y, 50, 1e3)
         self.simulator = Simulator(attractors, point_mass)
         self.simulation_trace = [(point_mass.x, point_mass.y)]
         self.sim_result_text = "Simulation: running..."
@@ -245,14 +248,19 @@ class GravityApp:
         self.simulating = False
         self.simulator = None
 
-        rows = self._load_permutated_rows()
-        if not rows:
-            self.simulation_trace.clear()
-            self.prediction_text = "Prediction: -"
-            self.sim_result_text = "Simulation: unavailable (missing Permutated Data.csv)"
-            return
+        # rows = self._load_permutated_rows()
+        # if not rows:
+        #     self.simulation_trace.clear()
+        #     self.prediction_text = "Prediction: -"
+        #     self.sim_result_text = "Simulation: unavailable (missing Permutated Data.csv)"
+        #     return
 
-        sample = random.choice(rows)
+        index = random.randint(0, rows.shape[1])
+        print(rows.shape)
+        sample = rows[:,index]
+
+        print(sample)
+        print(answers[:,index])
 
         # CSV format requested: [mass_x, mass_y, a1_x, a1_y, a2_x, a2_y, a3_x, a3_y, ...]
         self.points[3].x, self.points[3].y = sample[0], sample[1]

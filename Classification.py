@@ -5,45 +5,41 @@ import time
 
 from MachineLearningBase import *
 
-import DatabaseGeneration
+# import DatabaseGeneration
 import Simulation
 
 import numpy as np
 
-# database = np.load("database_v2.npy")
-# print(database.shape)
-# print(database.dtype)
-# print(database[:5])
-#
-# np.random.shuffle(database)
-# X = database[:, :-2].T
-# Y = num_to_one_hot(3, database[:,8])
-#
-# X = 2 * (X/100) - 1 # Normalise between [-1,1]
-#
-# print(X.shape)
-# print(Y.shape)
-#
-# database_examples = X.shape[1]
-# train_examples = database_examples * 9 // 10
-#
-# X_Train = X[:, :train_examples]
-# X_Test = X[:, train_examples:]
-#
-# Y_Train = Y[:, :train_examples]
-# Y_Test = Y[:, train_examples:]
+database = np.load("basin_dataset_gpu_1E6.npz")
+
+X = database["X"].T
+Y = num_to_one_hot(3, database["y"])
+
+X = 2 * (X/100) - 1 # Normalise between [-1,1]
+
+print(X.shape)
+print(Y.shape)
+
+database_examples = X.shape[1]
+train_examples = database_examples * 9 // 10
+
+X_Train = X[:, :train_examples]
+X_Test = X[:, train_examples:]
+
+Y_Train = Y[:, :train_examples]
+Y_Test = Y[:, train_examples:]
 
 
-layers = (
-    LayerConfiguration("Input Layer", 32, (8,), Relu(), He(), Adam()),
-    LayerConfiguration("Hidden Layer 1", 32, (32,), Relu(), He(), Adam()),
-    LayerConfiguration("Softmax Layer", 3, (32,), Softmax(), Xaviar(), Adam()),
-)
 # layers = (
-#     LayerConfiguration("Input Layer", 32, (8,), Relu(), File("Saved Weights/Layer0.h5"), Adam()),
-#     LayerConfiguration("Hidden Layer 1", 32, (32,), Relu(), File("Saved Weights/Layer1.h5"), Adam()),
-#     LayerConfiguration("Softmax Layer", 3, (32,), TrimSoftmax(), File("Saved Weights/Layer2.h5"), Adam()),
+#     LayerConfiguration("Input Layer", 32, (8,), Relu(), He(), Adam()),
+#     LayerConfiguration("Hidden Layer 1", 32, (32,), Relu(), He(), Adam()),
+#     LayerConfiguration("Softmax Layer", 3, (32,), Softmax(), Xaviar(), Adam()),
 # )
+layers = (
+    LayerConfiguration("Input Layer", 32, (8,), Relu(), File("Saved Weights/Layer0.h5"), Adam()),
+    LayerConfiguration("Hidden Layer 1", 32, (32,), Relu(), File("Saved Weights/Layer1.h5"), Adam()),
+    LayerConfiguration("Softmax Layer", 3, (32,), TrimSoftmax(), File("Saved Weights/Layer2.h5"), Adam()),
+)
 model = Network(
     NetworkConfiguration("Model", CategoricalCrossEntropy())
 )
