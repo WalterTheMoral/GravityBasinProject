@@ -44,7 +44,7 @@ class FixedMass:
 
 
 class PointMass(FixedMass):
-    def __init__(self, x: float, y: float, mass: float = 10, g_constant: float = 1) -> None:
+    def __init__(self, x: float, y: float, mass: float = 50, g_constant: float = 1) -> None:
         super().__init__(x, y, mass)
         self.velocity = Vector()
         self.g_constant = g_constant
@@ -61,7 +61,7 @@ class PointMass(FixedMass):
 
         return F
 
-    def friction_force(self, coefficient: float = 0.01):
+    def friction_force(self, coefficient: float = 0.05):
         return self.velocity * -coefficient
 
 
@@ -88,7 +88,7 @@ class Simulator:
         self.point.update(force, dt)
 
     def converged_to_fixed_mass(self, fixed_mass: FixedMass | int,
-                  max_distance: float = 2, max_velocity: float = 1) -> bool:
+                  max_distance: float = 3, max_velocity: float = 3) -> bool:
         if type(fixed_mass) == int:
             fixed_mass = attractors[fixed_mass]
 
