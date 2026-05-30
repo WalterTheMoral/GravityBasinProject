@@ -219,8 +219,9 @@ class GravityApp:
             else:
                 label = f"{point.name}: ({point.x:.2f}, {point.y:.2f})"
                 self.screen.blit(self.label_font.render(label, True, point.color), (780, y))
-                self.screen.blit(self.small_font.render("[drag to move]", True, point.color), (780, y + 34))
             y += line_gap
+
+        self.screen.blit(self.label_font.render("Drag to Move", True, (255, 255, 255)), (780, 650))
 
     def handle_mouse_down(self, pos):
         if self.buttons["simulate"].rect.collidepoint(pos):

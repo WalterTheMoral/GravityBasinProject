@@ -1,0 +1,25 @@
+digraph "packages_my_project" {
+rankdir=BT
+charset="utf-8"
+"Machine Learning Base" [color="black", label=<Machine Learning Base>, shape="box", style="solid"];
+"Machine Learning Base.Layer" [color="black", label=<Machine Learning Base.Layer>, shape="box", style="solid"];
+"Machine Learning Base.LayerClasses" [color="black", label=<Machine Learning Base.LayerClasses>, shape="box", style="solid"];
+"Machine Learning Base.LayerClasses.Activation" [color="black", label=<Machine Learning Base.LayerClasses.Activation>, shape="box", style="solid"];
+"Machine Learning Base.LayerClasses.Initialisation" [color="black", label=<Machine Learning Base.LayerClasses.Initialisation>, shape="box", style="solid"];
+"Machine Learning Base.LayerClasses.Layer_Configuration" [color="black", label=<Machine Learning Base.LayerClasses.Layer_Configuration>, shape="box", style="solid"];
+"Machine Learning Base.LayerClasses.LearningStrategy" [color="black", label=<Machine Learning Base.LayerClasses.LearningStrategy>, shape="box", style="solid"];
+"Machine Learning Base.LayerClasses.Regularisation" [color="black", label=<Machine Learning Base.LayerClasses.Regularisation>, shape="box", style="solid"];
+"Machine Learning Base.MachineLearningBase" [color="black", label=<Machine Learning Base.MachineLearningBase>, shape="box", style="solid"];
+"Machine Learning Base.Network" [color="black", label=<Machine Learning Base.Network>, shape="box", style="solid"];
+"Machine Learning Base.NetworkClasses" [color="black", label=<Machine Learning Base.NetworkClasses>, shape="box", style="solid"];
+"Machine Learning Base.NetworkClasses.Cost" [color="black", label=<Machine Learning Base.NetworkClasses.Cost>, shape="box", style="solid"];
+"Machine Learning Base.NetworkClasses.Network_Configuration" [color="black", label=<Machine Learning Base.NetworkClasses.Network_Configuration>, shape="box", style="solid"];
+"Machine Learning Base.Test" [color="black", label=<Machine Learning Base.Test>, shape="box", style="solid"];
+"Machine Learning Base.Util" [color="black", label=<Machine Learning Base.Util>, shape="box", style="solid"];
+"Machine Learning Base.Util.Util" [color="black", label=<Machine Learning Base.Util.Util>, shape="box", style="solid"];
+"Machine Learning Base" -> "Machine Learning Base.LayerClasses.Layer_Configuration" [arrowhead="open", arrowtail="none"];
+"Machine Learning Base.MachineLearningBase" -> "Machine Learning Base.LayerClasses.Layer_Configuration" [arrowhead="open", arrowtail="none"];
+"Machine Learning Base.Network" -> "Machine Learning Base.Layer" [arrowhead="open", arrowtail="none"];
+"Machine Learning Base.Network" -> "Machine Learning Base.Util.Util" [arrowhead="open", arrowtail="none"];
+"Machine Learning Base.Test" -> "Machine Learning Base.LayerClasses.Layer_Configuration" [arrowhead="open", arrowtail="none"];
+}

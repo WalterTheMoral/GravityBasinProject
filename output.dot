@@ -1,0 +1,25 @@
+digraph "packages_my_project" {
+rankdir=BT
+charset="utf-8"
+"Machine Learning Base" [color="black", label=<Machine Learning Base>, shape="box", style="solid"];
+"Layer" [color="black", label=<Machine Learning Base.Layer>, shape="box", style="solid"];
+"LayerClasses" [color="black", label=<Machine Learning Base.LayerClasses>, shape="box", style="solid"];
+"Activation" [color="black", label=<Machine Learning Base.LayerClasses.Activation>, shape="box", style="solid"];
+"Initialisation" [color="black", label=<Machine Learning Base.LayerClasses.Initialisation>, shape="box", style="solid"];
+"Layer_Configuration" [color="black", label=<Machine Learning Base.LayerClasses.Layer_Configuration>, shape="box", style="solid"];
+"LearningStrategy" [color="black", label=<Machine Learning Base.LayerClasses.LearningStrategy>, shape="box", style="solid"];
+"Regularisation" [color="black", label=<Machine Learning Base.LayerClasses.Regularisation>, shape="box", style="solid"];
+"MachineLearningBase" [color="black", label=<Machine Learning Base.MachineLearningBase>, shape="box", style="solid"];
+"Network" [color="black", label=<Machine Learning Base.Network>, shape="box", style="solid"];
+"NetworkClasses" [color="black", label=<Machine Learning Base.NetworkClasses>, shape="box", style="solid"];
+"Cost" [color="black", label=<Machine Learning Base.NetworkClasses.Cost>, shape="box", style="solid"];
+"Network_Configuration" [color="black", label=<Machine Learning Base.NetworkClasses.Network_Configuration>, shape="box", style="solid"];
+"Test" [color="black", label=<Machine Learning Base.Test>, shape="box", style="solid"];
+"Util" [color="black", label=<Machine Learning Base.Util>, shape="box", style="solid"];
+"Util" [color="black", label=<Machine Learning Base.Util.Util>, shape="box", style="solid"];
+"Machine Learning Base" -> "Layer_Configuration" [arrowhead="open", arrowtail="none"];
+"MachineLearningBase" -> "Layer_Configuration" [arrowhead="open", arrowtail="none"];
+"Network" -> "Layer" [arrowhead="open", arrowtail="none"];
+"Network" -> "Util" [arrowhead="open", arrowtail="none"];
+"Test" -> "Layer_Configuration" [arrowhead="open", arrowtail="none"];
+}

@@ -12,6 +12,12 @@ def random_coordinates():
     y = random.uniform(0, 100)
     return x, y
 
+attractors = [
+    FixedMass(*random_coordinates(), 1)
+    for _ in range(3)
+]
+point_mass = PointMass(*random_coordinates(), 50)
+
 def generate_sample(_):
     attractors = [
         FixedMass(*random_coordinates(), 1)
@@ -19,20 +25,15 @@ def generate_sample(_):
     ]
     mass_coords = random_coordinates()
     point_mass = PointMass(*mass_coords, 50)
-    sim = Simulator(attractors, point_mass)
 
-    start = time.time()
-    convergence_point = sim.converge_to_which_basin()
-    elapsed = start - time.time()
-
-
+    simulator = Simulator(attractors, point_mass)
+    convergence_point = simulator.converge_to_which_basin()
     return [
         *mass_coords,
         attractors[0].point[0], attractors[0].point[1],
         attractors[1].point[0], attractors[1].point[1],
         attractors[2].point[0], attractors[2].point[1],
         convergence_point,
-        elapsed
     ]
 
 
@@ -45,11 +46,10 @@ if __name__ == "__main__":
         "Convergence Point", "Convergence Time"
     ]
 
-    num_samples = 300_000
-    num_workers = mp.cpu_count() - 2  # use all cores
+    num_samples = 1_000_000
+    num_workers = mp.cpu_count()
 
     print("Start")
-
     with mp.Pool(num_workers) as pool:
         results = pool.imap_unordered(generate_sample, range(num_samples), chunksize=100)
 
