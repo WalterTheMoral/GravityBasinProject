@@ -15,7 +15,7 @@ class Vector:
             self.y = x_or_r * np.sin(y_or_theta)
 
 
-    def __add__(self, other): # Typing
+    def __add__(self, other):
         return Vector(self.x + other.x, self.y + other.y)
 
     def __mul__(self, other: float):

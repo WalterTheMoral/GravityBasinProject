@@ -1,5 +1,8 @@
 import re
 
+import numpy as np
+
+
 def simplify_dot_names(input_file, output_file):
     # Matches quoted full names like "A.B.C.ClassName"
     pattern = re.compile(r'"([^"]+)"')
@@ -19,4 +22,5 @@ def simplify_dot_names(input_file, output_file):
         f.write(new_content)
 
 if __name__ == "__main__":
-    simplify_dot_names("packages_my_project.dot", "output.dot")
+    print(np.exp(100))
+    # simplify_dot_names("packages_my_project.dot", "output.dot")

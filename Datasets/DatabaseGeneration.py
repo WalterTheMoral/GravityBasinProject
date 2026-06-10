@@ -1,8 +1,5 @@
 import csv
-import os.path
 import random
-import time
-import itertools
 import multiprocessing as mp
 
 from Simulation import *
@@ -33,7 +30,7 @@ def generate_sample(_):
         attractors[0].point[0], attractors[0].point[1],
         attractors[1].point[0], attractors[1].point[1],
         attractors[2].point[0], attractors[2].point[1],
-        convergence_point,
+        convergence_point
     ]
 
 
@@ -43,7 +40,7 @@ if __name__ == "__main__":
         "Fixed Point 1 X", "Fixed Point 1 Y",
         "Fixed Point 2 X", "Fixed Point 2 Y",
         "Fixed Point 3 X", "Fixed Point 3 Y",
-        "Convergence Point", "Convergence Time"
+        "Convergence Point"
     ]
 
     num_samples = 1_000_000
@@ -53,7 +50,7 @@ if __name__ == "__main__":
     with mp.Pool(num_workers) as pool:
         results = pool.imap_unordered(generate_sample, range(num_samples), chunksize=100)
 
-        with open("database_v3.csv", "a", newline="") as f:
+        with open("database.csv", "a", newline="") as f:
             writer = csv.writer(f)
 
             i = 0
